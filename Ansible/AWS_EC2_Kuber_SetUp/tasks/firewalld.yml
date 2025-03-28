@@ -1,0 +1,46 @@
+- name: Открываем порты для Kubernetes
+  hosts: kubernetes
+  become: yes
+  tasks:
+    - name: Устанавливаем firewalld и python3-firewall
+      dnf:
+        name:
+          - firewalld
+          - python3-firewall
+        state: present
+
+    - name: Включаем и запускаем firewalld
+      service:
+        name: firewalld
+        enabled: yes
+        state: started
+
+    - name: Открываем порты на Master Node
+      firewalld:
+        port: "{{ item }}"
+        permanent: yes
+        state: enabled
+        immediate: yes
+      loop:
+        - 6443/tcp
+        - 2379-2380/tcp
+        - 10250/tcp
+        - 10251/tcp
+        - 10252/tcp
+        - 10255/tcp
+      when: "'master' in inventory_hostname"
+
+    - name: Открываем порты на Worker Nodes
+      firewalld:
+        port: "{{ item }}"
+        permanent: yes
+        state: enabled
+        immediate: yes
+      loop:
+        - 6443/tcp
+        - 2379-2380/tcp
+        - 10250/tcp
+        - 10251/tcp
+        - 10252/tcp
+        - 10255/tcp
+      when: "'worker' in inventory_hostname"

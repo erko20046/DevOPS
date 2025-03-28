@@ -1,0 +1,17 @@
+- name: Initialize Kubernetes Master Node
+  hosts: master
+  become: yes
+  tasks:
+    - name: Initialize Kubernetes
+      command: kubeadm init --pod-network-cidr=10.244.0.0/16
+      register: kubeadm_output
+      changed_when: false
+
+    - debug:
+        msg: "{{ kubeadm_output.stdout_lines }}"
+
+    - name: Save kubeconfig
+      shell: |
+        mkdir -p $HOME/.kube
+        cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+        chown $(id -u):$(id -g) $HOME/.kube/config

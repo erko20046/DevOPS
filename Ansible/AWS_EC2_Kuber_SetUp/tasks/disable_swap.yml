@@ -1,0 +1,12 @@
+- name: Отключить swap
+  hosts: kubernetes
+  become: yes
+  tasks:
+    - name: Выключить swap временно
+      command: swapoff -a
+
+    - name: Удалить swap из fstab (чтобы не включался после перезагрузки)
+      lineinfile:
+        path: /etc/fstab
+        regexp: 'swap'
+        state: absent

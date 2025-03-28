@@ -1,0 +1,46 @@
+- name: Install Kubernetes (kubeadm, kubelet, kubectl)
+  hosts: kubernetes
+  become: yes
+  tasks:
+    - name: Add Kubernetes repository
+      copy:
+        dest: /etc/yum.repos.d/kubernetes.repo
+        content: |
+          [kubernetes]
+          name=Kubernetes
+          baseurl=https://pkgs.k8s.io/core:/stable:/v1.28/rpm/
+          enabled=1
+          gpgcheck=1
+          gpgkey=https://pkgs.k8s.io/core:/stable:/v1.28/rpm/repodata/repomd.xml.key
+          exclude=kubelet kubeadm kubectl cri-tools kubernetes-cni
+
+    - name: Verify Kubernetes repo
+      command: dnf repolist | grep kubernetes
+      register: k8s_repo_status
+      changed_when: false
+
+    - debug:
+        msg: "{{ k8s_repo_status.stdout_lines }}"
+
+    - name: Install Kubernetes packages
+      dnf:
+        name:
+          - kubeadm
+          - kubelet
+          - kubectl
+        state: present
+        disable_excludes: kubernetes
+
+    - name: Enable and start kubelet
+      systemd:
+        name: kubelet
+        state: started
+        enabled: yes
+
+    - name: Check kubeadm version
+      command: kubeadm version
+      register: kubeadm_version
+      changed_when: false
+
+    - debug:
+        msg: "{{ kubeadm_version.stdout_lines }}"

@@ -1,0 +1,15 @@
+- name: Join Worker Nodes to Kubernetes Cluster
+  hosts: workers
+  become: yes
+  vars:
+    join_command: "kubeadm join 172.31.16.224:6443 --token droox2.3potbe4eph1tjvzy --discovery-token-ca-cert-hash sha256:c6600f1a0da1c6238861980027aeb41a3b1382a3a1cafb9a13363fbb25837a6c"
+  tasks:
+    - name: Execute Join Command on Workers
+      command: "{{ join_command }}"
+      args:
+        executable: /bin/bash
+      register: join_result
+      changed_when: false
+
+    - debug:
+        msg: "{{ join_result.stdout_lines }}"

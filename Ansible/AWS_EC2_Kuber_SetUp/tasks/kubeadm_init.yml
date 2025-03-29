@@ -10,8 +10,10 @@
     - debug:
         msg: "{{ kubeadm_output.stdout_lines }}"
 
-    - name: Save kubeconfig
+    - name: Save kubeconfig for current user
       shell: |
-        mkdir -p $HOME/.kube
-        cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-        chown $(id -u):$(id -g) $HOME/.kube/config
+        mkdir -p ~/.kube
+        cp -i /etc/kubernetes/admin.conf ~/.kube/config
+        chown $(id -u):$(id -g) ~/.kube/config
+      become: yes
+      become_user: ec2-user

@@ -1,7 +1,7 @@
 # Порядок выполнение
 
-1. **set_hostname**
-2. **setup_hosts**
+1. **set_hostname** # opt : disable_selinux.yml check : getenforce
+2. **setup_hosts** 
 3. **disable_swap**
 4. **enable_networking.yml**
 5. **firewalld**
@@ -12,4 +12,4 @@
 10. **Настройка ролей**
 11. **install_calico**
 
-ex: ansible-playbook -i inventory.ini set_hostname.yml
+ex: ansible-playbook -i inventory.ini tasks/set_hostname.yml

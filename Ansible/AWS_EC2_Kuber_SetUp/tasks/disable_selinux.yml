@@ -1,0 +1,13 @@
+- name: Disable SELinux
+  hosts: kubernetes
+  become: yes
+  tasks:
+    - name: Set SELinux to permissive mode temporarily
+      command: setenforce 0
+      ignore_errors: yes
+
+    - name: Make SELinux permissive permanently
+      replace:
+        path: /etc/selinux/config
+        regexp: '^SELINUX=enforcing'
+        replace: 'SELINUX=permissive'

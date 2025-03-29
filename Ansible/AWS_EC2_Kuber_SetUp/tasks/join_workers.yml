@@ -2,7 +2,7 @@
   hosts: workers
   become: yes
   vars:
-    join_command: "kubeadm join 172.31.16.224:6443 --token droox2.3potbe4eph1tjvzy --discovery-token-ca-cert-hash sha256:c6600f1a0da1c6238861980027aeb41a3b1382a3a1cafb9a13363fbb25837a6c"
+    join_command: "kubeadm join 172.31.31.113:6443 --token 7s1i13.q82hha6uz5edl57j --discovery-token-ca-cert-hash sha256:2132757305cc784b8bc6f7e8cb88bff1c3884ec8e98a46a369ec7ac269903c42"
   tasks:
     - name: Execute Join Command on Workers
       command: "{{ join_command }}"

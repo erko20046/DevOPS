@@ -4,10 +4,10 @@
 
   vars:
     hosts_entries:
-      - "75.101.206.250 kuber-master"
-      - "34.193.149.87 kuber-node-1"
-      - "18.213.135.12 kuber-node-2"
-      - "44.208.169.137 kuber-node-3"
+      - "172.31.31.113 kuber-master"
+      - "172.31.20.21 kuber-node-1"
+      - "172.31.29.129 kuber-node-2"
+      - "172.31.17.92 kuber-node-3"
 
   tasks:
     - name: Добавить хосты в /etc/hosts
